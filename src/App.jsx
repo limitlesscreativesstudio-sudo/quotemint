@@ -85,15 +85,20 @@ ${feedbackInstruction}
 Make this feel authentic, emotionally charged, and built to drive saves, shares, and follows. This must be ready to post immediately.`;
 
   const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
-    }),
-  });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": process.env.REACT_APP_ANTHROPIC_KEY,
+    "anthropic-version": "2023-06-01",
+    "anthropic-dangerous-direct-browser-access": "true"
+  },
+  body: JSON.stringify({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 1000,
+    system: systemPrompt,
+    messages: [{ role: "user", content: userPrompt }],
+  }),
+});
 
   const data = await response.json();
   const text = data.content?.map(i => i.text || "").join("") || "";
